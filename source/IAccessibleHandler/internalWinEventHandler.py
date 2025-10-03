@@ -80,8 +80,8 @@ def winEventCallback(handle, eventID, window, objectID, childID, threadID, times
 					f"Dropping winEvent {getWinEventLogInfo(window, objectID, childID, eventID, threadID)}",
 				)
 			return
-		# Ignore all locationChange events except ones for the caret
-		if eventID == winUser.EVENT_OBJECT_LOCATIONCHANGE and objectID != winUser.OBJID_CARET:
+		# Ignore all locationChange events except ones for the caret or for a window being moved on the desktopscri
+		if eventID == winUser.EVENT_OBJECT_LOCATIONCHANGE and objectID != (winUser.OBJID_CARET or winUser.OBJID_WINDOW):
 			if isMSAADebugLoggingEnabled():
 				log.debug(
 					f"locationChange for something other than the caret. "

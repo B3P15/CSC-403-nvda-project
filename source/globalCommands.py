@@ -5085,7 +5085,7 @@ class GlobalCommands(ScriptableObject):
 	@gui.blockAction.when(gui.blockAction.Context.REMOTE_ACCESS_DISABLED)
 	def script_sendKeys(self, gesture: "inputCore.InputGesture"):
 		_remoteClient._remoteClient.toggleRemoteKeyControl(gesture)
-
+#KIERAN ADDED STUFF HERE
 	@script(
 		description=pgettext(
 			"remote",
@@ -5099,6 +5099,7 @@ class GlobalCommands(ScriptableObject):
 		_remoteClient._remoteClient.sendSAS()
 
 	@script(
+<<<<<<< HEAD
 		# Translators: Description for the image caption script
 		description=pgettext("imageDesc", "Get an AI generated image description"),
 		category=SCRCAT_IMAGE_DESC,
@@ -5114,6 +5115,22 @@ class GlobalCommands(ScriptableObject):
 	)
 	def script_toggleImageCaptioning(self, gesture: "inputCore.InputGesture"):
 		_localCaptioner._localCaptioner.toggleImageCaptioning(gesture)
+=======
+		description=_(
+			# Translators: Reads the position of a minimized window when moved on the desktop via the arrow keys
+			"Reads the current position of a minimized window on the desktop when moved with the arrow keys"
+			"If moved up or down, relative position to the top and bottom of the screen are read"
+			"If pressed three times, copies the status bar to the clipboard",
+		),
+		category=SCRCAT_FOCUS,
+		gestures=("kb:rightArrow", "kb:leftArrow", "kb:downArrow", "kb:upArrow"),
+		speakOnDemand=True,
+	)
+	def script_reportMinimizedWindowPosition(self, gesture):
+		text = self._reportLocationText
+		ui.message(f"The current position is {text}")
+
+>>>>>>> 6662d02a3987f6bc906372a237bdbba1a7dbc780
 
 
 #: The single global commands instance.

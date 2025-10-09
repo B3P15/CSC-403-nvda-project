@@ -287,7 +287,7 @@ reportUnknownMemberType = false  # 20000+ errors
 
 [tool.uv]
 default-groups = "all"
-python-preference = "only-system"
+python-preference = "system"
 environments = ["sys_platform == 'win32'"]
 required-version = ">=0.7.9"
 

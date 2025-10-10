@@ -1,4 +1,6 @@
-# Beep indication when an object in sleep mode gains focus
+# Indication upon NVDA+alt+a when an object in sleep mode gains focus
+# NVDA+alt+b toggles the aforementioned gesture between a beep and a speech
+# The speech option mentions the name of the focus object and the keybind to turn sleep mode off again
 # Author: Cooper Wooten
 
 import globalPluginHandler
@@ -9,16 +11,21 @@ import ui
 
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
+	togSleepType = "beep"
+
+	@script(gesture="kb:NVDA+alt+b", allowInSleepMode=True)
+	def script_sleepModeTypeToggle(self, gesture):
+		if GlobalPlugin.togSleepType == "beep":
+			GlobalPlugin.togSleepType = "speak"
+		else:
+			GlobalPlugin.togSleepType = "beep"
+
 	@script(gesture="kb:NVDA+alt+a", allowInSleepMode=True)
-	def script_sleepModeBeepAnnounce(self, gesture):
+	def script_sleepModeIndicate(self, gesture):
 		focus = api.getFocusObject()
 		curFocus = focus.appModule
 		if curFocus.sleepMode:
-			tones.beep(440, 500)
-
-	@script(gesture="kb:NVDA+alt+b", allowInSleepMode=True)
-	def script_sleepModeSpeechAnnounce(self, gesture):
-		focus = api.getFocusObject()
-		currFocus = focus.appModule
-		if currFocus.sleepMode:
-			ui.message(f"{focus.name} is currently in sleep mode")
+			if GlobalPlugin.togSleepType == "beep":
+				tones.beep(440, 500)
+			else: 
+				ui.message(f"{focus.name} is currently in sleep mode, Use NVDA plus shift plus z to turn sleep mode off.")

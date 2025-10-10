@@ -66,7 +66,7 @@ from NVDAObjects.behaviors import (
 )  # noqa: F401
 from locationHelper import RectLTWH
 import NVDAHelper
-
+from speech import priorities
 
 # Custom object ID used for clipboard pane in some versions of MS Office
 MSO_COLLECT_AND_PASTE_OBJECT_ID = 21
@@ -771,6 +771,30 @@ class IAccessible(Window):
 				and self.childCount == 0
 			):
 				clsList.insert(0, ContentGenericClient)
+
+	# loading
+	def event_stateChange(self):
+		"""Inform the user of load progress of a webpage"""
+		if self.role == controlTypes.Role.DOCUMENT:
+			speech.setSpeechMode(speech.speech.SpeechMode.talk)
+   		# Check if page is busy/loading
+			try:
+				# isBusy = controlTypes.State.BUSY in self.states
+				# finished loading
+				log.debug("DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE")
+				speech.speak(["Loading Complete"], None, priorities.Spri.NOW)
+				log.debug("SPOKE SPOKE SPOKE  SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE")
+			except Exception:
+				log.debug("LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING ")
+				speech.speak(["Loading page"], None, priorities.Spri.NOW)
+   			# if isBusy:
+			# 	log.debug("LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING ")
+			# 	speech.speak(["Loading page"], None, priorities.Spri.NOW)
+			# else:
+			# 	# finished loading
+			# 	log.debug("DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE")
+			# 	speech.speak(["Loading Complete"], None, priorities.Spri.NOW)
+			# 	log.debug("SPOKE SPOKE SPOKE  SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE")
 
 	# C901: 'IAccessible.__init__' is too complex
 	def __init__(  # noqa: C901

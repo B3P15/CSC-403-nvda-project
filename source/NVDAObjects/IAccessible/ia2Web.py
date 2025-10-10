@@ -32,8 +32,9 @@ import api
 import speech
 import config
 import NVDAObjects
-
-
+import ui
+import queueHandler
+from speech import priorities
 class IA2WebAnnotationTarget(AnnotationTarget):
 	def __init__(self, target: IAccessible):
 		self._target: IAccessible = target
@@ -248,6 +249,12 @@ class Ia2Web(IAccessible):
 			log.error(f"Unknown live politeness of {politeness}", exc_info=True)
 			super().liveRegionPoliteness
 
+	def webpage_Loading(self):
+		"""Inform the user of load progress of a webpage"""
+		try:
+			super().webpage_Loading()
+		except Exception:
+			pass
 
 class Document(Ia2Web):
 	value = None

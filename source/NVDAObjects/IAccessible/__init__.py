@@ -1,5 +1,5 @@
 # A part of NonVisual Desktop Access (NVDA)
-# Copyright (C) 2006-2025 NV Access Limited, Babbage B.V., Cyrille Bougot
+# Copyright (C) 2006-2025 NV Access Limited, Babbage B.V., Cyrille Bougot, Andrew Rupp
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -779,22 +779,10 @@ class IAccessible(Window):
 			speech.setSpeechMode(speech.speech.SpeechMode.talk)
    		# Check if page is busy/loading
 			try:
-				# isBusy = controlTypes.State.BUSY in self.states
-				# finished loading
-				log.debug("DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE")
+				# Tell the user that the page has finished loading
 				speech.speak(["Loading Complete"], None, priorities.Spri.NOW)
-				log.debug("SPOKE SPOKE SPOKE  SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE")
 			except Exception:
-				log.debug("LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING ")
 				speech.speak(["Loading page"], None, priorities.Spri.NOW)
-   			# if isBusy:
-			# 	log.debug("LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING LOADING ")
-			# 	speech.speak(["Loading page"], None, priorities.Spri.NOW)
-			# else:
-			# 	# finished loading
-			# 	log.debug("DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE")
-			# 	speech.speak(["Loading Complete"], None, priorities.Spri.NOW)
-			# 	log.debug("SPOKE SPOKE SPOKE  SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE")
 
 	# C901: 'IAccessible.__init__' is too complex
 	def __init__(  # noqa: C901

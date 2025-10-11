@@ -2,7 +2,7 @@
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 # Copyright (C) 2011-2025 NV Access Limited, Babbage B.v., Cyrille Bougot, Julien Cochuyt, Accessolutions,
-# Bill Dengler, Joseph Lee, Takuya Nishimoto
+# Bill Dengler, Joseph Lee, Takuya Nishimoto, Logan Coker
 
 import os
 import subprocess
@@ -122,20 +122,12 @@ def doInstall(
 		)
 		return
 	if not silent:
-###
-		updateContents = "\n"
-		with open('../../user_docs/en/changes.md', 'r', encoding='utf-8') as f:
-			for line in f:
-				if line.startswith('###'):
-					break
-			updateContents += line
-###
 		msg = (
 			# Translators: The message displayed when NVDA has been successfully installed.
 			_("Successfully installed NVDA. ")
 			if not isUpdate
 			# Translators: The message displayed when NVDA has been successfully updated.
-			else _("Successfully updated your installation of NVDA. " + updateContents)
+			else _("Successfully updated your installation of NVDA. ")
 		)
 		gui.messageBox(
 			# Translators: The message displayed to the user after NVDA is installed
@@ -306,11 +298,27 @@ class InstallerDialog(
 			)
 			continueButton.Enable(False)
 
+###
+		# gets file path to change log html
+		currFilePath = os.path.abspath(__file__)
+		projectRoot = os.path.dirname(os.path.dirname(os.path.dirname(currFilePath)))
+		changeFile = os.path.join(projectRoot, 'documentation', 'en', 'changes.html')
+
+		# creates a hyperlink to the filepath
+		updateLink = wx.adv.HyperlinkCtrl(
+			self,
+			id=wx.ID_ANY,
+			label="See Changes Before you Update",
+			url=changeFile
+		)
+###
+
 		bHelper.addButton(self, id=wx.ID_CANCEL)
 		# If we bind this using button.Bind, it fails to trigger when the dialog is closed.
 		self.Bind(wx.EVT_BUTTON, self.onCancel, id=wx.ID_CANCEL)
 
 		mainSizer.Add(sHelper.sizer, border=guiHelper.BORDER_FOR_DIALOGS, flag=wx.ALL)
+		mainSizer.Add(updateLink, border=guiHelper.BORDER_FOR_DIALOGS, flag=wx.ALL)  # adds hyperlink to install dialog
 		self.Sizer = mainSizer
 		mainSizer.Fit(self)
 		self.CentreOnScreen()

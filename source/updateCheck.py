@@ -565,7 +565,15 @@ class UpdateResultDialog(
 		else:
 			# Translators: A message indicating that an updated version of NVDA is available.
 			# {version} will be replaced with the version; e.g. 2011.3.
-			message = _("NVDA version {version} is available.").format(version=updateInfo.version)
+####
+			updateContents = "\n"
+			with open('../user_docs/en/changes.md', 'r', encoding='utf-8') as f:
+				for line in f:
+					if line.startswith('###'):
+						break
+				updateContents += line
+			message = _("NVDA version {version} is available. " + updateContents).format(version=updateInfo.version)
+####
 			bHelper.addButton(
 				self,
 				# Translators: The label of a button to download an NVDA update.

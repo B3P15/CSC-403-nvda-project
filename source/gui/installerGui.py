@@ -122,12 +122,20 @@ def doInstall(
 		)
 		return
 	if not silent:
+###
+		updateContents = "\n"
+		with open('../../user_docs/en/changes.md', 'r', encoding='utf-8') as f:
+			for line in f:
+				if line.startswith('###'):
+					break
+			updateContents += line
+###
 		msg = (
 			# Translators: The message displayed when NVDA has been successfully installed.
 			_("Successfully installed NVDA. ")
 			if not isUpdate
 			# Translators: The message displayed when NVDA has been successfully updated.
-			else _("Successfully updated your installation of NVDA. ")
+			else _("Successfully updated your installation of NVDA. " + updateContents)
 		)
 		gui.messageBox(
 			# Translators: The message displayed to the user after NVDA is installed

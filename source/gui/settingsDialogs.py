@@ -90,6 +90,7 @@ import winVersion
 import weakref
 import time
 from .dpiScalingHelper import DpiScalingHelperMixinWithoutInit
+import ui
 
 #: The size that settings panel text descriptions should be wrapped at.
 # Ensure self.scaleSize is used to adjust for OS scaling adjustments.
@@ -779,6 +780,7 @@ class MultiCategorySettingsDialog(SettingsDialog):
 	def onApply(self, evt):
 		try:
 			self._doSave()
+			ui.message(_("Changes applied."))
 		except ValueError:
 			log.debugWarning("Error while saving settings:", exc_info=True)
 			evt.StopPropagation()

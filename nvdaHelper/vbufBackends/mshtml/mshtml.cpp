@@ -1111,13 +1111,22 @@ VBufStorage_fieldNode_t* MshtmlVBufBackend_t::fillVBuf(VBufStorage_buffer_t* buf
 		}
 	} else if(nodeName.compare(L"IMG")==0) {
 		if ((tempIter = attribsMap.find(L"HTMLAttrib::alt")) != attribsMap.end()) {
+//
+			/*	if toggle on
+			 *		says toggle on, or nothing
+			 *		isInteractive = false;
+			 * 		contentString = L"Alt text reading turned off";
+			 *  else v
+			 */
 			if (tempIter->second.empty()) {
 				// alt="", so don't render this at all.
+				contentString = L"No alt-text for Image";
 				isInteractive = false;
 			} else {
 				// There is alt text, so use it.
 				contentString = tempIter->second;
 			}
+//
 		} else if ((tempIter = attribsMap.find(L"HTMLAttrib::title")) != attribsMap.end()) {
 			// There is a title, so use it.
 			contentString = tempIter->second;

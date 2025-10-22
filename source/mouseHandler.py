@@ -24,6 +24,7 @@ from contextlib import contextmanager
 import threading
 from winAPI.winUser.constants import SystemMetrics
 from winBindings import user32
+from time import sleep
 
 
 WM_MOUSEMOVE = 0x0200
@@ -101,6 +102,23 @@ def playAudioCoordinates(x, y, screenWidth, screenHeight, screenMinPos, detectBr
 	leftVolume = int((85 * ((screenWidth - float(x)) / screenWidth)) * brightness)
 	rightVolume = int((85 * (float(x) / screenWidth)) * brightness)
 	tones.beep(curPitch, 40, left=leftVolume, right=rightVolume)
+
+
+def speakAudioCoordinates(x, y, screenMinPos):
+	"""Speaks the audio coordinates (see playAudioCoordinates for tone feedback of coords)
+	- Function variable waitTime: time between readouts of coordinates
+	"""
+
+	waitTime = 0.1
+
+	sleep(waitTime)
+
+	# make coordinate values both positive and relative to (0, 0)
+	x = x - screenMinPos.x
+	y = y - screenMinPos.y
+
+	if not mouseMoved:
+		ui.message(_(f"{x} x and {y} y"))
 
 
 # Internal mouse event
@@ -230,6 +248,9 @@ def executeMouseMoveEvent(x, y):
 			config.conf["mouse"]["audioCoordinates_detectBrightness"],
 			config.conf["mouse"]["audioCoordinates_blurFactor"],
 		)
+
+	if config.conf["mouse"]["speakCoordinatesOnMouseMove"] and not oldMouseObject.sleepMode:
+		speakAudioCoordinates(x, y, minPos)
 
 	while mouseObject and mouseObject.beTransparentToMouse:
 		mouseObject = mouseObject.parent

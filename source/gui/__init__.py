@@ -201,15 +201,12 @@ class MainFrame(wx.Frame):
 	def showGui(self):
 		# The menu pops up at the location of the mouse, which means it pops up at an unpredictable location.
 		# Therefore, move the mouse to the center of the screen so that the menu will always pop up there.
-		#Approach 1
-		mouseLocation = winUser.getCursorPos()
+		#Approach 2
+		self.sysTrayIcon.mousePosition = winUser.getCursorPos()
 		###########
 		location = api.getDesktopObject().location
 		winUser.setCursorPos(*location.center)
 		self.sysTrayIcon.onActivate(None)
-		#Approach 1
-		winUser.setCursorPos(*mouseLocation)
-		###########
 
 	def onRevertToSavedConfigurationCommand(self, evt):
 		queueHandler.queueFunction(queueHandler.eventQueue, core.resetConfiguration)
@@ -636,6 +633,9 @@ class MainFrame(wx.Frame):
 
 class SysTrayIcon(wx.adv.TaskBarIcon):
 	def __init__(self, frame: MainFrame):
+		#Approach 2
+		self.mousePosition = None
+		###########
 		super(SysTrayIcon, self).__init__()
 		icon = wx.Icon(ICON_PATH, wx.BITMAP_TYPE_ICO)
 		self.SetIcon(icon, buildVersion.name)
@@ -759,7 +759,12 @@ class SysTrayIcon(wx.adv.TaskBarIcon):
 			# The NVDA app module doesn't know how to identify the NVDA menu yet.
 			# Signal that the NVDA menu has just been opened.
 			appModules.nvda.nvdaMenuIaIdentity = True
+		#Approach 2
+		log.debug(f"################################PRE POPUP {self.mousePosition}", stack_info=True, exc_info=True)
+		core.callLater(20, winUser.setCursorPos, *self.mousePosition)
+		###########
 		self.PopupMenu(self.menu)
+		log.debug("################################POST POPUP", stack_info=True, exc_info=True)
 		if appModules.nvda.nvdaMenuIaIdentity is True:
 			# The NVDA menu didn't actually appear for some reason.
 			appModules.nvda.nvdaMenuIaIdentity = None

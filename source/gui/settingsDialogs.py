@@ -780,6 +780,7 @@ class MultiCategorySettingsDialog(SettingsDialog):
 	def onApply(self, evt):
 		try:
 			self._doSave()
+			ui.message(_("Changes applied."))
 		except ValueError:
 			ui.message(_("Changes applied."))
 			log.debugWarning("Error while saving settings:", exc_info=True)
@@ -2259,6 +2260,13 @@ class MouseSettingsPanel(SettingsPanel):
 		self.bindHelpEvent("MouseSettingsHandleMouseControl", self.ignoreInjectedMouseInputCheckBox)
 		self.ignoreInjectedMouseInputCheckBox.SetValue(config.conf["mouse"]["ignoreInjectedMouseInput"])
 
+		# Translators: This is the label for a checkbox in the
+		# mouse settings panel.
+		speakCoords = _("&Speak coordinates when mouse moves")
+		self.speakCheckBox = sHelper.addItem(wx.CheckBox(self, label=speakCoords))
+		self.bindHelpEvent("MouseSettingsSpeak", self.speakCheckBox)
+		self.speakCheckBox.SetValue(config.conf["mouse"]["speakCoordinatesOnMouseMove"])
+
 
 
 
@@ -2286,6 +2294,7 @@ class MouseSettingsPanel(SettingsPanel):
 			self.audioDetectBrightnessCheckBox.IsChecked()
 		)
 		config.conf["mouse"]["ignoreInjectedMouseInput"] = self.ignoreInjectedMouseInputCheckBox.IsChecked()
+		config.conf["mouse"]["speakCoordinatesOnMouseMove"] = self.speakCheckBox.IsChecked()
 
 
 class ReviewCursorPanel(SettingsPanel):

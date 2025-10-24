@@ -124,6 +124,23 @@ def boundaryNotification(x, y, minPos, screenH, screenW):
 		speech.speak(["Mouse at top border"], None, priorities.Spri.NOW)
 
 
+def speakAudioCoordinates(x, y, screenMinPos):
+	"""Speaks the audio coordinates (see playAudioCoordinates for tone feedback of coords)
+	- Function variable waitTime: time between readouts of coordinates
+	"""
+
+	waitTime = 0.1
+
+	sleep(waitTime)
+
+	# make coordinate values both positive and relative to (0, 0)
+	x = x - screenMinPos.x
+	y = y - screenMinPos.y
+
+	if not mouseMoved:
+		ui.message(_(f"{x} x and {y} y"))
+
+
 # Internal mouse event
 
 

@@ -24,7 +24,8 @@ from contextlib import contextmanager
 import threading
 from winAPI.winUser.constants import SystemMetrics
 from winBindings import user32
-
+from time import sleep
+from speech import priorities
 
 WM_MOUSEMOVE = 0x0200
 WM_LBUTTONDOWN = 0x0201
@@ -101,6 +102,26 @@ def playAudioCoordinates(x, y, screenWidth, screenHeight, screenMinPos, detectBr
 	leftVolume = int((85 * ((screenWidth - float(x)) / screenWidth)) * brightness)
 	rightVolume = int((85 * (float(x) / screenWidth)) * brightness)
 	tones.beep(curPitch, 40, left=leftVolume, right=rightVolume)
+
+def boundaryNotification(x, y, minPos, screenH, screenW):
+	log.debug("THIS IS WORKINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGgg")
+	log.debug(f"Maximum X coordinate {screenW} Maximum Y coordinate {screenH}")
+	if x == minPos.x+1 and y == minPos.y+1:
+		speech.speak(["Mouse at bottom left corner"], None, priorities.Spri.NOW)
+	elif x == minPos.x+1 and y == screenH-1:
+		speech.speak(["Mouse at top left corner"], None, priorities.Spri.NOW)
+	elif x == screenW-1 and y == minPos.y+1:
+		speech.speak(["Mouse at bottom right corner"], None, priorities.Spri.NOW)
+	elif x == screenW-1 and y == screenH-1:
+		speech.speak(["Mouse at top right corner"], None, priorities.Spri.NOW)
+	elif x == minPos.x+1:
+		speech.speak(["Mouse at left border"], None, priorities.Spri.NOW)
+	elif y == minPos.y+1:
+		speech.speak(["Mouse at bottom border"], None, priorities.Spri.NOW)
+	elif x == screenW-1:
+		speech.speak(["Mouse at right border"], None, priorities.Spri.NOW)
+	elif y == screenH-1:
+		speech.speak(["Mouse at top border"], None, priorities.Spri.NOW)
 
 
 # Internal mouse event
@@ -230,6 +251,9 @@ def executeMouseMoveEvent(x, y):
 			config.conf["mouse"]["audioCoordinates_detectBrightness"],
 			config.conf["mouse"]["audioCoordinates_blurFactor"],
 		)
+
+	if config.conf["mouse"]["boundaryNotification"] and not oldMouseObject.sleepMode:
+		boundaryNotification(x, y, minPos, screenHeight, screenWidth)
 
 	while mouseObject and mouseObject.beTransparentToMouse:
 		mouseObject = mouseObject.parent

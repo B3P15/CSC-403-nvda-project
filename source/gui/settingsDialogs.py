@@ -90,6 +90,7 @@ import winVersion
 import weakref
 import time
 from .dpiScalingHelper import DpiScalingHelperMixinWithoutInit
+import ui
 
 #: The size that settings panel text descriptions should be wrapped at.
 # Ensure self.scaleSize is used to adjust for OS scaling adjustments.
@@ -780,6 +781,7 @@ class MultiCategorySettingsDialog(SettingsDialog):
 		try:
 			self._doSave()
 		except ValueError:
+			ui.message(_("Changes applied."))
 			log.debugWarning("Error while saving settings:", exc_info=True)
 			evt.StopPropagation()
 		else:
@@ -2257,8 +2259,25 @@ class MouseSettingsPanel(SettingsPanel):
 		self.bindHelpEvent("MouseSettingsHandleMouseControl", self.ignoreInjectedMouseInputCheckBox)
 		self.ignoreInjectedMouseInputCheckBox.SetValue(config.conf["mouse"]["ignoreInjectedMouseInput"])
 
+
+
+
+
+
+
+
+
+		# Translators: This is the label for a checkbox in the
+		# mouse settings panel.
+		boundCheckBoxText = _("Notify user when mouse hits wall")
+		self.boundCheckBox = sHelper.addItem(wx.CheckBox(self, label=boundCheckBoxText))
+		self.bindHelpEvent("MouseSettingsSpeak", self.boundCheckBox)
+		self.boundCheckBox.SetValue(config.conf["mouse"]["boundaryNotification"])
+
 	def onSave(self):
 		config.conf["mouse"]["reportMouseShapeChanges"] = self.shapeCheckBox.IsChecked()
+
+		config.conf["mouse"]["boundaryNotification"] = self.boundCheckBox.IsChecked()
 		config.conf["mouse"]["enableMouseTracking"] = self.mouseTrackingCheckBox.IsChecked()
 		config.conf["mouse"]["mouseTextUnit"] = self.textUnits[self.textUnitComboBox.GetSelection()]
 		config.conf["mouse"]["reportObjectRoleOnMouseEnter"] = self.reportObjectPropertiesCheckBox.IsChecked()

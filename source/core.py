@@ -409,6 +409,7 @@ def _setInitialFocus():
 	try:
 		focus = api.getDesktopObject().objectWithFocus()
 		if focus:
+			#need to implement getVisibleWindows here with restrictions
 			eventHandler.queueEvent("gainFocus", focus)
 	except:  # noqa: E722
 		log.exception("Error retrieving initial focus")

@@ -39,6 +39,8 @@ from winBindings.user32 import (
 	PAINTSTRUCT as _PAINTSTRUCT,
 	GUITHREADINFO as _GUITHREADINFO,
 	INPUT,
+	EnumWindows,
+	GetWindow,
 )
 import winKernel
 from collections.abc import Callable
@@ -663,6 +665,15 @@ def isWindowVisible(window):
 def isWindowEnabled(window):
 	return bool(_user32.IsWindowEnabled(window))
 
+def getVisibleWindows():
+	visible_windows =[]
+	@_WNDENUMPROC
+	def enum_handler(hWnd: int, _lParam: int):
+		if isWindowVisible(hWnd) and getWindowText(hWnd):
+			visible_windows.append(hWnd)
+		return True
+	winBindings.user32.EnumWindows(enum_handler, 0)
+	return visible_windows
 
 def getGUIThreadInfo(threadID):
 	info = _GUITHREADINFO(cbSize=sizeof(_GUITHREADINFO))

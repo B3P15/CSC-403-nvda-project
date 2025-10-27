@@ -32,7 +32,7 @@ from speech import (
 	sayAll,
 	shortcutKeys,
 )
-from NVDAObjects import NVDAObject, NVDAObjectTextInfo
+from NVDAObjects import NVDAObject, NVDAObjectTextInfo, window
 import globalVars
 from logHandler import log
 import gui
@@ -2495,6 +2495,25 @@ class GlobalCommands(ScriptableObject):
 			# If we're disabling pass-through, re-enable auto-pass-through.
 			vbuf.disableAutoPassThrough = vbuf.passThrough
 		browseMode.reportPassThrough(vbuf)
+
+
+	@script(
+		# Translators: Input help mode message for quit NVDA command.
+		description=_("Gets the topmost visible window"),
+		gesture="kb:NVDA+control+l"
+	)
+	def script_reportTopWindow(self, gesture):
+		allWindows = winUser.getVisibleWindows()
+		desktopWindows = []
+		for win in allWindows:
+			obj = window.Window(windowHandle=win)
+			if obj.name is not None and (obj.location.height != api.getDesktopObject().location.height):
+				if obj.location.height > 0:
+					desktopWindows.append(win)
+		lastObj = window.Window(windowHandle=desktopWindows[0])
+		ui.message(f"All windows processed last window seen was {lastObj.name}")
+		log.debug(f"#########################################################{desktopWindows}")
+
 
 	@script(
 		# Translators: Input help mode message for quit NVDA command.

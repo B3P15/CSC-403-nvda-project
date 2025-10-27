@@ -106,22 +106,16 @@ def playAudioCoordinates(x, y, screenWidth, screenHeight, screenMinPos, detectBr
 def boundaryNotification(x, y, minPos, screenH, screenW):
 	log.debug("THIS IS WORKINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGgg")
 	log.debug(f"Maximum X coordinate {screenW} Maximum Y coordinate {screenH}")
-	if x == minPos.x+1 and y == minPos.y+1:
-		speech.speak(["Mouse at bottom left corner"], None, priorities.Spri.NOW)
-	elif x == minPos.x+1 and y == screenH-1:
-		speech.speak(["Mouse at top left corner"], None, priorities.Spri.NOW)
-	elif x == screenW-1 and y == minPos.y+1:
-		speech.speak(["Mouse at bottom right corner"], None, priorities.Spri.NOW)
-	elif x == screenW-1 and y == screenH-1:
-		speech.speak(["Mouse at top right corner"], None, priorities.Spri.NOW)
-	elif x == minPos.x+1:
+	x = x - minPos.x
+	y = y - minPos.y
+	if x == minPos.x+1:
 		speech.speak(["Mouse at left border"], None, priorities.Spri.NOW)
 	elif y == minPos.y+1:
-		speech.speak(["Mouse at bottom border"], None, priorities.Spri.NOW)
+		speech.speak(["Mouse at top border"], None, priorities.Spri.NOW)
 	elif x == screenW-1:
 		speech.speak(["Mouse at right border"], None, priorities.Spri.NOW)
 	elif y == screenH-1:
-		speech.speak(["Mouse at top border"], None, priorities.Spri.NOW)
+		speech.speak(["Mouse at bottom border"], None, priorities.Spri.NOW)
 
 
 def speakAudioCoordinates(x, y, screenMinPos):

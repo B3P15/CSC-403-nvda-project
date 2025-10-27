@@ -668,7 +668,9 @@ def isWindowEnabled(window):
 def getVisibleWindows():
 	visible_windows =[]
 	@_WNDENUMPROC
+	#helper procedure that is passed to EnumWindows
 	def enum_handler(hWnd: int, _lParam: int):
+		#check to make sure window is visible to user and that it has descriptive text
 		if isWindowVisible(hWnd) and getWindowText(hWnd):
 			visible_windows.append(hWnd)
 		return True

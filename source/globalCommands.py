@@ -2499,7 +2499,7 @@ class GlobalCommands(ScriptableObject):
 
 	@script(
 		# Translators: Input help mode message for quit NVDA command.
-		description=_("Gets the topmost visible window"),
+		description=_("Gets the name of the topmost visible window"),
 		gesture="kb:NVDA+control+l"
 	)
 	def script_reportTopWindow(self, gesture):

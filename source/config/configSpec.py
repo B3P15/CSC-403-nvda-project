@@ -141,6 +141,7 @@ schemaVersion = integer(min=0, default={latestSchemaVersion})
 	audioCoordinates_maxVolume = float(default=1.0)
 	audioCoordinates_minPitch = integer(default=220)
 	audioCoordinates_maxPitch = integer(default=880)
+	speakCoordinatesOnMouseMove = boolean(default=False)
 	reportMouseShapeChanges = boolean(default=false)
 	ignoreInjectedMouseInput = boolean(default=false)
 

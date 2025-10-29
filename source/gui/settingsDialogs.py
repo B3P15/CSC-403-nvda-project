@@ -90,6 +90,7 @@ import winVersion
 import weakref
 import time
 from .dpiScalingHelper import DpiScalingHelperMixinWithoutInit
+import ui
 
 #: The size that settings panel text descriptions should be wrapped at.
 # Ensure self.scaleSize is used to adjust for OS scaling adjustments.
@@ -779,6 +780,7 @@ class MultiCategorySettingsDialog(SettingsDialog):
 	def onApply(self, evt):
 		try:
 			self._doSave()
+			ui.message(_("Changes applied."))
 		except ValueError:
 			log.debugWarning("Error while saving settings:", exc_info=True)
 			evt.StopPropagation()
@@ -2257,6 +2259,13 @@ class MouseSettingsPanel(SettingsPanel):
 		self.bindHelpEvent("MouseSettingsHandleMouseControl", self.ignoreInjectedMouseInputCheckBox)
 		self.ignoreInjectedMouseInputCheckBox.SetValue(config.conf["mouse"]["ignoreInjectedMouseInput"])
 
+		# Translators: This is the label for a checkbox in the
+		# mouse settings panel.
+		speakCoords = _("&Speak coordinates when mouse moves")
+		self.speakCheckBox = sHelper.addItem(wx.CheckBox(self, label=speakCoords))
+		self.bindHelpEvent("MouseSettingsSpeak", self.speakCheckBox)
+		self.speakCheckBox.SetValue(config.conf["mouse"]["speakCoordinatesOnMouseMove"])
+
 	def onSave(self):
 		config.conf["mouse"]["reportMouseShapeChanges"] = self.shapeCheckBox.IsChecked()
 		config.conf["mouse"]["enableMouseTracking"] = self.mouseTrackingCheckBox.IsChecked()
@@ -2267,6 +2276,7 @@ class MouseSettingsPanel(SettingsPanel):
 			self.audioDetectBrightnessCheckBox.IsChecked()
 		)
 		config.conf["mouse"]["ignoreInjectedMouseInput"] = self.ignoreInjectedMouseInputCheckBox.IsChecked()
+		config.conf["mouse"]["speakCoordinatesOnMouseMove"] = self.speakCheckBox.IsChecked()
 
 
 class ReviewCursorPanel(SettingsPanel):

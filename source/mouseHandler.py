@@ -104,7 +104,7 @@ def playAudioCoordinates(x, y, screenWidth, screenHeight, screenMinPos, detectBr
 	tones.beep(curPitch, 40, left=leftVolume, right=rightVolume)
 
 def boundaryNotification(x, y, minPos, screenH, screenW):
-	log.debug("THIS IS WORKINGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGgg")
+	"""tells the user when their cursor hits a screen wall"""
 	log.debug(f"Maximum X coordinate {screenW} Maximum Y coordinate {screenH}")
 	x = x - minPos.x
 	y = y - minPos.y

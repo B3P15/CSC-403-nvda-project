@@ -2256,6 +2256,13 @@ class MouseSettingsPanel(SettingsPanel):
 		)
 		self.bindHelpEvent("MouseSettingsHandleMouseControl", self.ignoreInjectedMouseInputCheckBox)
 		self.ignoreInjectedMouseInputCheckBox.SetValue(config.conf["mouse"]["ignoreInjectedMouseInput"])
+######
+		altText = _("&Turn on/off reading of alt text on images")
+		self.altReadingCheckBox = sHelper.addItem(wx.CheckBox(self, label=altText))
+		self.bindHelpEvent("AltTextReading", self.altReadingCheckBox)
+		self.altReadingCheckBox.SetValue(config.conf["mouse"]["altTextReading"])
+######
+
 
 	def onSave(self):
 		config.conf["mouse"]["reportMouseShapeChanges"] = self.shapeCheckBox.IsChecked()
@@ -2268,6 +2275,9 @@ class MouseSettingsPanel(SettingsPanel):
 		)
 		config.conf["mouse"]["ignoreInjectedMouseInput"] = self.ignoreInjectedMouseInputCheckBox.IsChecked()
 
+######
+		config.conf["mouse"]["altTextReadings"] = self.altTextReading.IsChecked()
+######
 
 class ReviewCursorPanel(SettingsPanel):
 	# Translators: This is the label for the review cursor settings panel.

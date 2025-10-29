@@ -685,3 +685,9 @@ writeCrashDump.argtypes = (
 	c_void_p,  # exceptionPointers
 )
 writeCrashDump.restype = bool
+
+####
+altTextReading = dll.altTextReading
+altTextReading.argtypes = c_bool
+altTextReading.restype = None
+####

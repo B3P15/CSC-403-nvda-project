@@ -934,3 +934,8 @@ __getattr__ = _deprecate.handleDeprecations(
 	),
 	_deprecate.RemovedSymbol("bstrReturn", _bstrReturn),
 )
+
+######
+def updateAltTextReading():
+	localLib.altTextReading(bool(config.conf["mouse"]["altTextReadings"]))
+######

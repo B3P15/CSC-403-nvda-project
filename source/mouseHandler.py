@@ -121,16 +121,19 @@ def boundaryNotification(x, y, minPos, screenH, screenW):
 def speakAudioCoordinates(x, y, screenMinPos):
 	"""Speaks the audio coordinates (see playAudioCoordinates for tone feedback of coords)
 	- Function variable waitTime: time between readouts of coordinates
+	- waitTime is time to wait after mouse move before reading coordinates
 	"""
 
 	waitTime = 0.1
-
 	sleep(waitTime)
 
 	# make coordinate values both positive and relative to (0, 0)
+	# taken from playAudioCoordinates in order to have normalized coordinate system
 	x = x - screenMinPos.x
 	y = y - screenMinPos.y
 
+	# Only call the coordinate message once the mouse has stopped moving
+	# Without check, queues multiple coordinate reads
 	if not mouseMoved:
 		ui.message(_(f"{x} x and {y} y"))
 
@@ -263,6 +266,9 @@ def executeMouseMoveEvent(x, y):
 			config.conf["mouse"]["audioCoordinates_blurFactor"],
 		)
 
+	# Checks the config file to determine if coordinates should be read
+	if config.conf["mouse"]["speakCoordinatesOnMouseMove"] and not oldMouseObject.sleepMode:
+		speakAudioCoordinates(x, y, minPos)
 	if config.conf["mouse"]["boundaryNotification"] and not oldMouseObject.sleepMode:
 		boundaryNotification(x, y, minPos, screenHeight, screenWidth)
 

@@ -1,5 +1,5 @@
 # A part of NonVisual Desktop Access (NVDA)
-# Copyright (C) 2006-2025 NV Access Limited, Babbage B.V., Cyrille Bougot
+# Copyright (C) 2006-2025 NV Access Limited, Babbage B.V., Cyrille Bougot, Andrew Rupp
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
 
@@ -772,6 +772,17 @@ class IAccessible(Window):
 			):
 				clsList.insert(0, ContentGenericClient)
 
+	# loading
+	def event_stateChange(self):
+		"""Inform the user of load progress of a webpage"""
+		if self.role == controlTypes.Role.DOCUMENT:
+			speech.setSpeechMode(speech.speech.SpeechMode.talk)
+   		# Check if page is busy/loading
+			try:
+				# Tell the user that the page has finished loading
+				speech.speak(["Loading Complete"], None, priorities.Spri.NOW)
+			except Exception:
+				speech.speak(["Loading page"], None, priorities.Spri.NOW)
 		# loading
 	def webpage_Loading(self):
 		"""Inform the user of load progress of a webpage"""

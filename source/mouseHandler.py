@@ -105,16 +105,15 @@ def playAudioCoordinates(x, y, screenWidth, screenHeight, screenMinPos, detectBr
 
 def boundaryNotification(x, y, minPos, screenH, screenW):
 	"""tells the user when their cursor hits a screen wall"""
-	log.debug(f"Maximum X coordinate {screenW} Maximum Y coordinate {screenH}")
 	x = x - minPos.x
 	y = y - minPos.y
-	if x == minPos.x+1:
+	if x <= minPos.x+5:
 		speech.speak(["Mouse at left border"], None, priorities.Spri.NOW)
-	elif y == minPos.y+1:
+	elif y <= minPos.y+5:
 		speech.speak(["Mouse at top border"], None, priorities.Spri.NOW)
-	elif x == screenW-1:
+	elif x >= screenW-5:
 		speech.speak(["Mouse at right border"], None, priorities.Spri.NOW)
-	elif y == screenH-1:
+	elif y >= screenH-5:
 		speech.speak(["Mouse at bottom border"], None, priorities.Spri.NOW)
 
 

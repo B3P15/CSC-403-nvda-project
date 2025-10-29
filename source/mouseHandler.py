@@ -25,7 +25,7 @@ import threading
 from winAPI.winUser.constants import SystemMetrics
 from winBindings import user32
 from time import sleep
-
+from speech import priorities
 
 WM_MOUSEMOVE = 0x0200
 WM_LBUTTONDOWN = 0x0201
@@ -102,6 +102,20 @@ def playAudioCoordinates(x, y, screenWidth, screenHeight, screenMinPos, detectBr
 	leftVolume = int((85 * ((screenWidth - float(x)) / screenWidth)) * brightness)
 	rightVolume = int((85 * (float(x) / screenWidth)) * brightness)
 	tones.beep(curPitch, 40, left=leftVolume, right=rightVolume)
+
+def boundaryNotification(x, y, minPos, screenH, screenW):
+	"""tells the user when their cursor hits a screen wall"""
+	log.debug(f"Maximum X coordinate {screenW} Maximum Y coordinate {screenH}")
+	x = x - minPos.x
+	y = y - minPos.y
+	if x == minPos.x+1:
+		speech.speak(["Mouse at left border"], None, priorities.Spri.NOW)
+	elif y == minPos.y+1:
+		speech.speak(["Mouse at top border"], None, priorities.Spri.NOW)
+	elif x == screenW-1:
+		speech.speak(["Mouse at right border"], None, priorities.Spri.NOW)
+	elif y == screenH-1:
+		speech.speak(["Mouse at bottom border"], None, priorities.Spri.NOW)
 
 
 def speakAudioCoordinates(x, y, screenMinPos):
@@ -255,6 +269,8 @@ def executeMouseMoveEvent(x, y):
 	# Checks the config file to determine if coordinates should be read
 	if config.conf["mouse"]["speakCoordinatesOnMouseMove"] and not oldMouseObject.sleepMode:
 		speakAudioCoordinates(x, y, minPos)
+	if config.conf["mouse"]["boundaryNotification"] and not oldMouseObject.sleepMode:
+		boundaryNotification(x, y, minPos, screenHeight, screenWidth)
 
 	while mouseObject and mouseObject.beTransparentToMouse:
 		mouseObject = mouseObject.parent

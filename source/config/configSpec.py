@@ -144,6 +144,7 @@ schemaVersion = integer(min=0, default={latestSchemaVersion})
 	speakCoordinatesOnMouseMove = boolean(default=False)
 	reportMouseShapeChanges = boolean(default=false)
 	ignoreInjectedMouseInput = boolean(default=false)
+	boundaryNotification = boolean(default=false)
 
 [speechViewer]
 	showSpeechViewerAtStartup = boolean(default=false)

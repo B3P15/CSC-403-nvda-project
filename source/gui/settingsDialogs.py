@@ -782,6 +782,7 @@ class MultiCategorySettingsDialog(SettingsDialog):
 			self._doSave()
 			ui.message(_("Changes applied."))
 		except ValueError:
+			ui.message(_("Changes applied."))
 			log.debugWarning("Error while saving settings:", exc_info=True)
 			evt.StopPropagation()
 		else:
@@ -2266,8 +2267,25 @@ class MouseSettingsPanel(SettingsPanel):
 		self.bindHelpEvent("MouseSettingsSpeak", self.speakCheckBox)
 		self.speakCheckBox.SetValue(config.conf["mouse"]["speakCoordinatesOnMouseMove"])
 
+
+
+
+
+
+
+
+
+		# Translators: This is the label for a checkbox in the
+		# mouse settings panel.
+		boundCheckBoxText = _("Notify user when mouse hits wall")
+		self.boundCheckBox = sHelper.addItem(wx.CheckBox(self, label=boundCheckBoxText))
+		self.bindHelpEvent("MouseSettingsSpeak", self.boundCheckBox)
+		self.boundCheckBox.SetValue(config.conf["mouse"]["boundaryNotification"])
+
 	def onSave(self):
 		config.conf["mouse"]["reportMouseShapeChanges"] = self.shapeCheckBox.IsChecked()
+
+		config.conf["mouse"]["boundaryNotification"] = self.boundCheckBox.IsChecked()
 		config.conf["mouse"]["enableMouseTracking"] = self.mouseTrackingCheckBox.IsChecked()
 		config.conf["mouse"]["mouseTextUnit"] = self.textUnits[self.textUnitComboBox.GetSelection()]
 		config.conf["mouse"]["reportObjectRoleOnMouseEnter"] = self.reportObjectPropertiesCheckBox.IsChecked()

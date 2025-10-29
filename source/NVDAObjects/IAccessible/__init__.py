@@ -783,6 +783,23 @@ class IAccessible(Window):
 				speech.speak(["Loading Complete"], None, priorities.Spri.NOW)
 			except Exception:
 				speech.speak(["Loading page"], None, priorities.Spri.NOW)
+		# loading
+	def webpage_Loading(self):
+		"""Inform the user of load progress of a webpage"""
+		log.debug("RUNNING WEBPAGE LOADING FUNCTIONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNn")
+		if self.role == controlTypes.Role.DOCUMENT and self.hasFocus:
+   			# Check if page is busy/loading
+			if controlTypes.State.BUSY:
+				log.debug("SUPER SUPER SUPER SUPER SUPER SUPER SUPER SUPER SUPER SUPER LOAD LOAD LOAD LOAD LOAD LOAD LOAD LOAD LOAD LOAD WOW LOAD LOAD LOAD LOAD LOAD LOAD LOAD LOAD LOAD LOAD LOAD LOAD LOAD")
+				speech.speak(["Loading page"], None, priorities.Spri.NOW)
+				log.debug("SUPER SUPER SUPER SUPER SUPER SUPER SUPER SUPER SPOKE SPOKE SPOKE  SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE")
+				self.webpage_Loading()
+			else:
+				# finished loading
+				log.debug("SUPER SUPER SUPER SUPER SUPER SUPER SUPER SUPER DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE WOW DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE DONE")
+				speech.speak(["Loading Complete"], None, priorities.Spri.NOW)
+				log.debug("SUPER SUPER SUPER SUPER SUPER SUPER SUPER SUPER SPOKE SPOKE SPOKE  SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE SPOKE")
+
 
 	# C901: 'IAccessible.__init__' is too complex
 	def __init__(  # noqa: C901

@@ -402,12 +402,29 @@ def _setInitialFocus():
 	"""Sets the initial focus if no focus event was received at startup."""
 	import eventHandler
 	import api
+	import winUser
+	import NVDAObjects.window
 
 	if eventHandler.lastQueuedFocusObject:
 		# The focus has already been set or a focus event is pending.
+		log.debug("#############################################################FOCUS ALREADY FOUND")
 		return
 	try:
-		focus = api.getDesktopObject().objectWithFocus()
+		focus = api.getDesktopObject()
+		#gets a list of all active windows
+		allWindows = winUser.getVisibleWindows()
+		desktopWindows = []
+		log.debug("########################################################WE ARE HERE")
+		for win in allWindows:
+			#checks to make sure the window is actually visible to the user and minimized on the desktop
+			obj = NVDAObjects.window.Window(windowHandle=win)
+			if obj.name is not None and (obj.location.height != api.getDesktopObject().location.height):
+				#make sure the visible window is not just an icon
+				if (obj.location.height > 35) and (obj.location.left > 0) and (obj._get_isInForeground()):
+					desktopWindows.append(win)
+		if desktopWindows:
+			#set the focus to the topmnost window if it is found
+			focus = NVDAObjects.window.Window(windowHandle=desktopWindows[0])
 		if focus:
 			#need to implement getVisibleWindows here with restrictions
 			eventHandler.queueEvent("gainFocus", focus)

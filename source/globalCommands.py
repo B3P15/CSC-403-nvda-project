@@ -2508,12 +2508,14 @@ class GlobalCommands(ScriptableObject):
 		for win in allWindows:
 			obj = window.Window(windowHandle=win)
 			if obj.name is not None and (obj.location.height != api.getDesktopObject().location.height):
-				if obj.location.height > 0:
+				if (obj.location.height > 35) and (obj.location.left > 0):
 					desktopWindows.append(win)
-		lastObj = window.Window(windowHandle=desktopWindows[0])
-		ui.message(f"All windows processed last window seen was {lastObj.name}")
-		log.debug(f"#########################################################{desktopWindows}")
-
+		if desktopWindows:
+			lastObj = window.Window(windowHandle=desktopWindows[0])
+			ui.message(f"All windows processed last window seen was {lastObj.name}")
+			log.debug(f"#########################################################{desktopWindows}")
+		else:
+			ui.message("No windows seen. The screen is on the desktop.")
 
 	@script(
 		# Translators: Input help mode message for quit NVDA command.

@@ -672,7 +672,9 @@ def getVisibleWindows():
 	def enum_handler(hWnd: int, _lParam: int):
 		#check to make sure window is visible to user and that it has descriptive text
 		if isWindowVisible(hWnd) and getWindowText(hWnd):
-			visible_windows.append(hWnd)
+			#invisible settings window that is always running during NVDA
+			if (hWnd != 196988):
+				visible_windows.append(hWnd)
 		return True
 	winBindings.user32.EnumWindows(enum_handler, 0)
 	return visible_windows

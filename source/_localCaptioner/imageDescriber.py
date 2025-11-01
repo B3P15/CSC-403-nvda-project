@@ -163,7 +163,7 @@ class ImageDescriber:
 		else:
 			self.isModelLoaded = True
 			# Translators: Message when successfully load the model
-			wx.CallAfter(ui.message, pgettext("imageDesc", "image captioning on"))
+			# wx.CallAfter(ui.message, pgettext("imageDesc", "image captioning on"))
 
 	def loadModelInBackground(self, localModelDirPath: str | None = None) -> None:
 		"""load model in child thread

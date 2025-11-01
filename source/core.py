@@ -419,7 +419,7 @@ def _setInitialFocus():
 			obj = NVDAObjects.window.Window(windowHandle=win)
 			if obj.name is not None and (obj.location.height != api.getDesktopObject().location.height):
 				#make sure the visible window is not just an icon
-				if (obj.location.height > 35) and (obj.location.left > 0):
+				if (obj.location.height > 35) and (obj.location.left > 0) and (obj.name != "Settings"):
 					desktopWindows.append(win)
 		if desktopWindows:
 			#set the focus to the topmnost window if it is found

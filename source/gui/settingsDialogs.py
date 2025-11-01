@@ -2276,7 +2276,7 @@ class MouseSettingsPanel(SettingsPanel):
 		config.conf["mouse"]["ignoreInjectedMouseInput"] = self.ignoreInjectedMouseInputCheckBox.IsChecked()
 
 ######
-		config.conf["mouse"]["altTextReadings"] = self.altTextReading.IsChecked()
+		config.conf["mouse"]["altTextReading"] = self.altReadingCheckBox.IsChecked()
 ######
 
 class ReviewCursorPanel(SettingsPanel):

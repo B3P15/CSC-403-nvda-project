@@ -14,6 +14,7 @@ import time
 import colors
 import api
 from annotation import _AnnotationRolesT
+import config.configFlags
 import controlTypes
 from controlTypes import OutputReason, TextPosition
 from controlTypes.state import State
@@ -2546,7 +2547,11 @@ def getControlFieldSpeech(  # noqa: C901
 			if levelSequence:
 				out.extend(levelSequence)
 		if role == controlTypes.Role.GRAPHIC and content:
-			out.append(content)
+#####
+			# check for user setting to turn off alt text reading
+			if not config.conf["mouse"]["altTextReading"]:
+				out.append(content)
+#####
 		types.logBadSequenceTypes(out)
 		return out
 	else:

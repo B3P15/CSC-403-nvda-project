@@ -44,9 +44,6 @@ typedef struct {
 void incBackendLibRefCount();
 void decBackendLibRefCount();
 
-//
-extern "C" __declspec(dllexport) void setAltTextReadings(bool value);
-// 
 
 // gets the window message registered by MSHTML which is used to fetch the MSHTML object model from its window.
 UINT getHTMLWindowMessage();

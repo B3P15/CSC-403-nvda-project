@@ -116,6 +116,7 @@ def boundaryNotification(x, y, minPos, screenH, screenW):
 		speech.speak(["Mouse at right border"], None, priorities.Spri.NOW)
 	elif y == screenH-1:
 		speech.speak(["Mouse at bottom border"], None, priorities.Spri.NOW)
+	sleep(1)
 
 
 def speakAudioCoordinates(x, y, screenMinPos):

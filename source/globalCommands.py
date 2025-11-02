@@ -32,7 +32,7 @@ from speech import (
 	sayAll,
 	shortcutKeys,
 )
-from NVDAObjects import NVDAObject, NVDAObjectTextInfo
+from NVDAObjects import NVDAObject, NVDAObjectTextInfo, window
 import globalVars
 from logHandler import log
 import gui
@@ -2495,6 +2495,8 @@ class GlobalCommands(ScriptableObject):
 			# If we're disabling pass-through, re-enable auto-pass-through.
 			vbuf.disableAutoPassThrough = vbuf.passThrough
 		browseMode.reportPassThrough(vbuf)
+
+
 
 	@script(
 		# Translators: Input help mode message for quit NVDA command.

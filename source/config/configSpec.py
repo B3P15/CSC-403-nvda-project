@@ -143,7 +143,6 @@ schemaVersion = integer(min=0, default={latestSchemaVersion})
 	audioCoordinates_maxPitch = integer(default=880)
 	reportMouseShapeChanges = boolean(default=false)
 	ignoreInjectedMouseInput = boolean(default=false)
-	altTextReading = boolean(default=false)
 
 [speechViewer]
 	showSpeechViewerAtStartup = boolean(default=false)

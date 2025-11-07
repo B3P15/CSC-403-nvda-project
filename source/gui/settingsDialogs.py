@@ -2256,12 +2256,6 @@ class MouseSettingsPanel(SettingsPanel):
 		)
 		self.bindHelpEvent("MouseSettingsHandleMouseControl", self.ignoreInjectedMouseInputCheckBox)
 		self.ignoreInjectedMouseInputCheckBox.SetValue(config.conf["mouse"]["ignoreInjectedMouseInput"])
-######
-		altText = _("&Turn on/off reading of alt text on images")
-		self.altReadingCheckBox = sHelper.addItem(wx.CheckBox(self, label=altText))
-		self.bindHelpEvent("AltTextReading", self.altReadingCheckBox)
-		self.altReadingCheckBox.SetValue(config.conf["mouse"]["altTextReading"])
-######
 
 
 	def onSave(self):

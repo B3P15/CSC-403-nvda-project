@@ -2138,6 +2138,13 @@ class KeyboardSettingsPanel(SettingsPanel):
 		self.bindHelpEvent("KeyboardSettingsHandleKeys", self.handleInjectedKeysCheckBox)
 		self.handleInjectedKeysCheckBox.SetValue(config.conf["keyboard"]["handleInjectedKeys"])
 
+		# Translators: This is the label for a checkbox in the
+		# keyboard settings panel.
+		announceCutCopyPasteText = _("Announce cut, copy, paste on keybind execution")
+		self.announceCutCopyPasteCheckBox = sHelper.addItem(wx.CheckBox(self, label=announceCutCopyPasteText))
+		self.bindHelpEvent("KeyboardSettingsReadCopyPaste", self.announceCutCopyPasteCheckBox)
+		self.announceCutCopyPasteCheckBox.SetValue(config.conf["keyboard"]["announceCutCopyPaste"])
+
 		minTimeout = int(config.conf.getConfigValidation(("keyboard", "multiPressTimeout")).kwargs["min"])
 		maxTimeout = int(config.conf.getConfigValidation(("keyboard", "multiPressTimeout")).kwargs["max"])
 		# Translators: The label for a control in keyboard settings to modify the timeout for a multiple keypress.
@@ -2182,6 +2189,7 @@ class KeyboardSettingsPanel(SettingsPanel):
 		config.conf["keyboard"]["speakCommandKeys"] = self.commandKeysCheckBox.IsChecked()
 		config.conf["keyboard"]["alertForSpellingErrors"] = self.alertForSpellingErrorsCheckBox.IsChecked()
 		config.conf["keyboard"]["handleInjectedKeys"] = self.handleInjectedKeysCheckBox.IsChecked()
+		config.conf["keyboard"]["announceCutCopyPaste"] = self.announceCutCopyPasteCheckBox.IsChecked()
 		config.conf["keyboard"]["multiPressTimeout"] = self.multiPressTimeoutEdit.GetValue()
 
 

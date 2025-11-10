@@ -2282,10 +2282,16 @@ class MouseSettingsPanel(SettingsPanel):
 		self.bindHelpEvent("MouseSettingsSpeak", self.boundCheckBox)
 		self.boundCheckBox.SetValue(config.conf["mouse"]["boundaryNotification"])
 
+		hypeCheckBoxText = _("Read hyperlink")
+		self.hypeCheckBox = sHelper.addItem(wx.CheckBox(self, label=hypeCheckBoxText))
+		self.bindHelpEvent("MouseSettingsSpeak", self.boundCheckBox)
+		self.hypeCheckBox.SetValue(config.conf["mouse"]["boundaryNotification"])
+
 	def onSave(self):
 		config.conf["mouse"]["reportMouseShapeChanges"] = self.shapeCheckBox.IsChecked()
 
 		config.conf["mouse"]["boundaryNotification"] = self.boundCheckBox.IsChecked()
+		config.conf["mouse"]["speakHyperlink"] = self.hypeCheckBox.IsChecked()
 		config.conf["mouse"]["enableMouseTracking"] = self.mouseTrackingCheckBox.IsChecked()
 		config.conf["mouse"]["mouseTextUnit"] = self.textUnits[self.textUnitComboBox.GetSelection()]
 		config.conf["mouse"]["reportObjectRoleOnMouseEnter"] = self.reportObjectPropertiesCheckBox.IsChecked()

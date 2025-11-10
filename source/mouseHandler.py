@@ -26,6 +26,7 @@ from winAPI.winUser.constants import SystemMetrics
 from winBindings import user32
 from time import sleep
 from speech import priorities
+import controlTypes
 
 WM_MOUSEMOVE = 0x0200
 WM_LBUTTONDOWN = 0x0201
@@ -116,6 +117,16 @@ def boundaryNotification(x, y, minPos, screenH, screenW):
 	elif y >= screenH-5:
 		speech.speak(["Mouse at bottom border"], None, priorities.Spri.NOW)
 	sleep(0.1)
+
+def speakHyperlink(x, y, screenMinPos):
+	x = x - screenMinPos.x
+	y = y - screenMinPos.y
+	desktopObject = api.getDesktopObject()
+	obj = desktopObject.objectFromPoint(x, y)
+	if obj.role == controlTypes.Role.LINK:
+		url = getattr(obj, "IA2Attributes", {}).get("url", obj.value)
+		speech.speak(url, None, priorities.Spri.NOW)
+		sleep(0.1)
 
 
 def speakAudioCoordinates(x, y, screenMinPos):
@@ -271,6 +282,8 @@ def executeMouseMoveEvent(x, y):
 		speakAudioCoordinates(x, y, minPos)
 	if config.conf["mouse"]["boundaryNotification"] and not oldMouseObject.sleepMode:
 		boundaryNotification(x, y, minPos, screenHeight, screenWidth)
+	if config.conf["mouse"]["speakHyperlink"] and not oldMouseObject.sleepMode:
+		speakHyperlink(x, y, minPos)
 
 	while mouseObject and mouseObject.beTransparentToMouse:
 		mouseObject = mouseObject.parent

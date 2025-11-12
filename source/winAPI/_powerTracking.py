@@ -30,6 +30,7 @@ import ui
 import winBindings.kernel32
 from winBindings.kernel32 import SYSTEM_POWER_STATUS as SystemPowerStatus
 import winKernel
+import comtypes
 
 
 BATTERY_LIFE_TIME_UNKNOWN = 0xFFFFFFFF
@@ -183,7 +184,8 @@ def _getSpeechForBatteryStatus(
 		return []
 
 	text: List[str] = []
-
+	
+	remainingChargeTime = _getTimeToFullCharge()
 	if context == _ReportContext.AC_STATUS_CHANGE:
 		# When the AC status changes, users want to be alerted to the new AC status first.
 		text.append(_getACStatusText(systemPowerStatus))
@@ -194,6 +196,12 @@ def _getSpeechForBatteryStatus(
 		# rather than the AC status which should be unchanged.
 		text.extend(_getBatteryInformation(systemPowerStatus))
 		text.append(_getACStatusText(systemPowerStatus))
+		if remainingChargeTime is not None:
+			text.append(
+				# Translators: Reported when the battery is charging.
+				# E.g. "30 minutes remaining until full charge"
+				_("{minute} minutes remaining until fully charged").format(minute=_getTimeToFullCharge())
+		)
 	else:
 		raise NotImplementedError(f"Unexpected _ReportContext: {context}")
 
@@ -271,3 +279,97 @@ def _getBatteryInformation(systemPowerStatus: SystemPowerStatus) -> List[str]:
 				_("{minuteText} remaining").format(minuteText=minuteText),
 			)
 	return text
+
+def _propertyDictionary(com_obj):
+    """Return a dict of property name -> value for a SWbemObject (comtypes)."""
+    props = {}
+    try:
+        for p in com_obj.Properties_:
+            # Some properties may be None; that's fine
+            props.get  # ensure 'p' is a COM prop object
+            name = getattr(p, "Name", None)
+            val = getattr(p, "Value", None)
+            if name is not None:
+                props[name] = val
+    except Exception:
+        # If iteration fails, try attribute-based access as a last resort
+        try:
+            for name in dir(com_obj):
+                if not name.startswith("_"):
+                    try:
+                        props[name] = getattr(com_obj, name)
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+    return props
+
+def _getTimeToFullCharge():
+    """
+    Return calculated minutes until full charge when charging.
+	Returns None if unavailable.
+    Uses root\\wmi BatteryStatus and BatteryStaticData for battery information.
+    """
+    try:
+        # Connect to WMI root\wmi
+        locator = comtypes.client.CreateObject("WbemScripting.SWbemLocator")
+        svc = locator.ConnectServer(".", "root\\wmi")
+
+        status_q = svc.ExecQuery("SELECT * FROM BatteryStatus")
+        static_q = svc.ExecQuery("SELECT * FROM BatteryStaticData")
+
+        # No data present
+        if not status_q:
+            log.debug("BatteryStatus WMI query returned no instances.")
+            return None
+
+        # Use first battery entry (extend if multi-battery present)
+        status_obj = list(status_q)[0]
+        status_properties = _propertyDictionary(status_obj)
+
+        # static data may be missing; try to use DesignCapacity if FullChargedCapacity missing
+        full_capacity = None
+        if static_q:
+            static_obj = list(static_q)[0]
+            static_properties = _propertyDictionary(static_obj)
+            # prefer FullChargedCapacity, fall back to DesignCapacity
+            full_capacity = static_properties.get("FullChargedCapacity") or static_properties.get("DesignedCapacity")
+
+        # Values from BatteryStatus
+        remaining = status_properties.get("RemainingCapacity")  # mWh
+        charge_rate = status_properties.get("ChargeRate")       # often mWh/hour
+        charging = bool(status_properties.get("Charging"))
+
+        # Validate numeric values
+        def is_valid_num(x):
+            return x is not None and isinstance(x, (int, float)) and not (isinstance(x, float))
+
+        if not is_valid_num(remaining):
+            log.debug("RemainingCapacity unavailable; cannot compute ETA.")
+            return None
+
+        # Prefer full_capacity; if still None we cannot compute ETA
+        if not is_valid_num(full_capacity):
+            log.debug("FullChargedCapacity/DesignCapacity unavailable; cannot compute ETA.")
+            return None
+
+        # Charging case: use charge_rate
+        if charging and is_valid_num(charge_rate) and charge_rate != 0:
+            # charge_rate is assumed mWh per hour (i.e. energy/hour),
+            # so (full - remaining) [mWh] / rate [mWh/hour] = hours
+            delta_mwh = float(full_capacity) - float(remaining)
+            if delta_mwh <= 0:
+                return 0.0
+            hours = delta_mwh / float(charge_rate)
+            minutes = hours * 60.0
+            if minutes > 0:
+                return round(minutes)
+            return None
+
+        # If rates are zero or missing, we can't compute via BatteryStatus rates
+        log.debug("Charge rate missing or zero; cannot compute ETA from BatteryStatus.")
+        return None
+
+    except Exception as e:
+        log.debug(f"Exception computing battery ETA from root\\wmi BatteryStatus: {e}")
+        return None

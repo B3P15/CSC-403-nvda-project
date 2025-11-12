@@ -126,7 +126,7 @@ def speakHyperlink(x, y, screenMinPos):
 	if obj.role == controlTypes.Role.LINK:
 		url = getattr(obj, "IA2Attributes", {}).get("url", obj.value)
 		speech.speak(url, None, priorities.Spri.NOW)
-		sleep(0.1)
+		sleep(0.5)
 
 
 def speakAudioCoordinates(x, y, screenMinPos):

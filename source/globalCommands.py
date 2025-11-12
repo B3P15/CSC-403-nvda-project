@@ -5126,6 +5126,25 @@ class GlobalCommands(ScriptableObject):
 		_localCaptioner._localCaptioner.toggleImageCaptioning(gesture)
 
 
+	@script(gesture="kb:control+c")
+	def script_announceCopy(self, gesture):
+		gesture.send()
+		if config.conf["keyboard"]["announceCutCopyPaste"]:
+			ui.message(_("Copy"))
+
+	@script(gesture="kb:control+x")
+	def script_announceCut(self, gesture):
+		gesture.send()
+		if config.conf["keyboard"]["announceCutCopyPaste"]:
+			ui.message(_("Cut"))
+
+	@script(gesture="kb:control+v")
+	def script_announcePaste(self, gesture):
+		gesture.send()
+		if config.conf["keyboard"]["announceCutCopyPaste"]:
+			ui.message(_("Paste"))
+
+
 #: The single global commands instance.
 #: @type: L{GlobalCommands}
 commands = GlobalCommands()
